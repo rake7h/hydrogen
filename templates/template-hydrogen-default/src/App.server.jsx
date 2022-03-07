@@ -1,5 +1,13 @@
 import renderHydrogen from '@shopify/hydrogen/entry-server';
-import {Router, Route, FileRoutes, ShopifyProvider} from '@shopify/hydrogen';
+import {
+  Router,
+  Route,
+  FileRoutes,
+  ShopifyProvider,
+  PerformanceMetricsServerAnalyticsConnector,
+  CookieSessionStorage,
+  useCustomer,
+} from '@shopify/hydrogen';
 import {Suspense} from 'react';
 import DefaultSeo from './components/DefaultSeo.server';
 import NotFound from './components/NotFound.server';
@@ -11,10 +19,12 @@ import {
 } from '@shopify/hydrogen/client';
 
 function App() {
+  const customerAccessToken = useCustomer();
+
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ShopifyProvider>
-        <CartProvider>
+        <CartProvider customerAccessToken={customerAccessToken}>
           <DefaultSeo />
           <Router>
             <FileRoutes />
