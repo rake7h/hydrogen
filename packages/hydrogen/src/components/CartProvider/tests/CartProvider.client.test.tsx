@@ -17,25 +17,13 @@ jest.mock('../hooks.client', () => {
   };
 });
 
-jest.mock('../../../foundation/useServerProps', () => ({
-  userServerProps: jest.fn(),
-}));
-
-const useServerPropsMock: jest.Mock = jest.requireMock(
-  '../../../foundation/useServerProps'
-).useServerProps;
-
 describe('<CartProvider />', () => {
   beforeEach(() => {
     fetchCartMock.mockReturnValue({data: {}});
-    useServerPropsMock.mockReturnValue({
-      serverState: {},
-    });
   });
 
   afterEach(() => {
     fetchCartMock.mockReset();
-    useServerPropsMock.mockReset();
   });
 
   describe('prop `data` does not exist', () => {
@@ -276,11 +264,7 @@ describe('<CartProvider />', () => {
 
   describe('cartCreate', () => {
     it('use countryCode if it exist in serverState', () => {
-      const mockCountryCode = 'CA';
-
-      useServerPropsMock.mockReturnValue({
-        serverState: {country: {isoCode: mockCountryCode}},
-      });
+      const mockCountryCode = CountryCode.Ca;
 
       const cartMock: CartInput = {
         lines: [
@@ -291,7 +275,7 @@ describe('<CartProvider />', () => {
       };
 
       const wrapper = mount(
-        <CartProvider>
+        <CartProvider countryCode={mockCountryCode}>
           <CartContext.Consumer>
             {(cartContext) => {
               return (
@@ -331,10 +315,6 @@ describe('<CartProvider />', () => {
       const serverStateCountryCode = CountryCode.Ca;
       const cartInputCountryCode = CountryCode.Tw;
 
-      useServerPropsMock.mockReturnValue({
-        serverState: {country: {isoCode: serverStateCountryCode}},
-      });
-
       const cartMock: CartInput = {
         lines: [
           {
@@ -347,7 +327,7 @@ describe('<CartProvider />', () => {
       };
 
       const wrapper = mount(
-        <CartProvider>
+        <CartProvider countryCode={serverStateCountryCode}>
           <CartContext.Consumer>
             {(cartContext) => {
               return (
