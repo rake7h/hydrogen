@@ -4,8 +4,6 @@ import {
   Route,
   FileRoutes,
   ShopifyProvider,
-  PerformanceMetricsServerAnalyticsConnector,
-  CookieSessionStorage,
   useCustomer,
 } from '@shopify/hydrogen';
 import {Suspense} from 'react';
